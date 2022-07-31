@@ -1,25 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { lazy } from "react";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  unstable_HistoryRouter as HistoryRouter,
+} from "react-router-dom";
+import logo from "./logo.svg";
+import "./App.css";
+import OutsideClick from "./components/outsideClick";
+import Tooltip from "./components/tooltip";
+
+const Home = lazy(() => import("./components/home"));
+const Custom = lazy(() => import("./components/custom"));
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <BrowserRouter>
+      <div className="App">
+        <OutsideClick
+          onOutClick={() => {
+            console.log("onOutClick");
+          }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          <div className="text-xl p-6 mx-6 font-bold underline bg-green-100 dark:bg-[#f0d71e] sm:bg-green-500">
+            inside div
+          </div>
+        </OutsideClick>
+        <button className="btn-primary content11">click</button>
+        {/* <Tooltip>
+          <span>qq</span>
+        </Tooltip> */}
+      </div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/custom" element={<Custom />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

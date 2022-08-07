@@ -1,8 +1,15 @@
-import React, { Component, useEffect, useContext, useState } from "react";
+import React, {
+  Component,
+  useEffect,
+  useContext,
+  useState,
+  useRef,
+} from "react";
 import { Modal, Divider } from "antd-mobile";
 import ToolTip from "./tooltip";
 // import element from "./dialog";
 import Confirm, { Context, show, dialogInstance } from "./confirm";
+import { createAnimateNode } from "./animate-element";
 import useModal from "./use-modal";
 import styles from "./style.module.scss";
 
@@ -119,7 +126,7 @@ export class Home1 extends Component {
     return (
       <div onClick={this.onClick}>
         this is Home
-        {show ? (
+        {/* {show ? (
           <ToolTip>
             <Confirm
               {...{
@@ -130,7 +137,7 @@ export class Home1 extends Component {
               }}
             />
           </ToolTip>
-        ) : null}
+        ) : null} */}
       </div>
     );
   }
@@ -154,6 +161,8 @@ const Count = ({ title }) => {
 
 const Home = () => {
   const [title, setTitle] = useState("hello");
+  const ref = useRef();
+  const countRef = useRef(0);
   const [modal, contextHolder] = useModal();
   const onCancelClick = () => console.log("onCancelClick");
   const onOkClick = () => console.log("onOkClick");
@@ -164,15 +173,39 @@ const Home = () => {
     }, 3000);
   }, []);
 
-  const onClick = () =>
-    modal.info({
-      title,
-      content: <Count title={title} />,
-      onCancelClick,
-      onOkClick,
-    });
+  const onClick = () => {
+    const keyframes = [
+      { transform: "translate(0px)" },
+      { transform: "translate(650px, -180px)" },
+    ];
+    const options = {
+      // timing options
+      duration: 400,
+      easing: "ease-in-out",
+    };
 
-  return <div onClick={onClick}>this is Home {contextHolder}</div>;
+    const onFinish = () => console.log("onFinishonFinish");
+
+    const children = <></>;
+
+    createAnimateNode({ keyframes, options, onFinish, children }, ref.current, {
+      className: styles.childWrap,
+    });
+  };
+  // modal.info({
+  //   title,
+  //   content: <Count title={title} />,
+  //   onCancelClick,
+  //   onOkClick,
+  // });
+
+  return (
+    <>
+      <div onClick={onClick}>this is Home1 </div>
+
+      <div className={styles.chipsWrap} ref={ref}></div>
+    </>
+  );
 };
 
 export default Home;
